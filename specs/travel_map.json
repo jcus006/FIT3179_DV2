@@ -1,0 +1,234 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 650,
+  "autosize": { "type": "fit", "contains": "padding" },
+  "projection": { "type": "mercator", "center": [134, -28], "scale": 850 },
+
+  "params": [
+    {
+      "name": "season_filter",
+      "value": "Winter",
+      "bind": {
+        "input": "select",
+        "options": ["Summer", "Autumn", "Winter", "Spring"],
+        "labels": ["Summer", "Autumn", "Winter", "Spring"],
+        "name": "Season: "
+      }
+    },
+    {
+      "name": "city_filter",
+      "value": "MELBOURNE",
+      "bind": {
+        "input": "select",
+        "options": [
+          "ADELAIDE",
+          "ALBURY",
+          "ALICE SPRINGS",
+          "ARMIDALE",
+          "AYERS ROCK",
+          "BALLINA",
+          "BOULDER",
+          "BRISBANE",
+          "BROOME",
+          "BUNDABERG",
+          "CAIRNS",
+          "CALOUNDRA",
+          "CANBERRA",
+          "COFFS HARBOUR",
+          "DARWIN",
+          "DEVONPORT",
+          "DUBBO",
+          "GERALDTON",
+          "GOLD COAST",
+          "HAMILTON ISLAND",
+          "HERVEY BAY",
+          "HOBART",
+          "KARRATHA",
+          "LAUNCESTON",
+          "MELBOURNE",
+          "NEWCASTLE",
+          "PERTH",
+          "PORT MACQUARIE",
+          "PROSERPINE",
+          "SYDNEY"
+        ],
+        "labels": [
+          "Adelaide",
+          "Albury",
+          "Alice springs",
+          "Armidale",
+          "Ayers rock",
+          "Ballina",
+          "Boulder",
+          "Brisbane",
+          "Broome",
+          "Bundaberg",
+          "Cairns",
+          "Caloundra",
+          "Canberra",
+          "Coffs harbour",
+          "Darwin",
+          "Devonport",
+          "Dubbo",
+          "Geraldton",
+          "Gold coast",
+          "Hamilton island",
+          "Hervey bay",
+          "Hobart",
+          "Karratha",
+          "Launceston",
+          "Melbourne",
+          "Newcastle",
+          "Perth",
+          "Port macquarie",
+          "Proserpine",
+          "Sydney"
+        ],
+        "name": "Origin City: "
+      }
+    }
+  ],
+
+  "layer": [
+    {
+      "data": { "sphere": true },
+      "mark": { "type": "geoshape", "fill": "#eaf4ff" }
+    },
+
+    {
+      "data": { "graticule": { "step": [20, 20] } },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#cbd5e1",
+        "strokeWidth": 0.5,
+        "fill": null
+      }
+    },
+
+    {
+      "data": {
+        "url": "maps/ne_50m_admin_0_countries.json",
+        "format": { "type": "topojson", "feature": "ne_50m_admin_0_countries" }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#f3f4f6",
+        "stroke": "#94a3b8",
+        "strokeWidth": 0.5
+      }
+    },
+
+    {
+      "data": {
+        "url": "maps/ne_50m_admin_1_states_provinces.json",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_50m_admin_1_states_provinces"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#000000",
+        "strokeWidth": 0.6,
+        "fill": null
+      }
+    },
+
+    {
+      "data": {
+        "values": [
+          { "name": "Western Australia", "lon": 122.0, "lat": -25.3 },
+          { "name": "Northern Territory", "lon": 133.5, "lat": -19.5 },
+          { "name": "South Australia", "lon": 135.0, "lat": -30.0 },
+          { "name": "Queensland", "lon": 144.0, "lat": -23.0 },
+          { "name": "New South Wales", "lon": 147.0, "lat": -32.5 },
+          { "name": "Victoria", "lon": 144.5, "lat": -37.2 },
+          { "name": "Tasmania", "lon": 146.7, "lat": -42.0 }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "fill": "#333",
+        "baseline": "middle",
+        "align": "center",
+        "opacity": 0.5
+      },
+      "encoding": {
+        "longitude": { "field": "lon", "type": "quantitative" },
+        "latitude": { "field": "lat", "type": "quantitative" },
+        "text": { "field": "name" }
+      }
+    },
+
+    {
+      "data": {
+        "url": "data/Travel_coords.csv"
+      },
+      "transform": [
+        { "filter": "datum.Season == season_filter" },
+        {
+          "filter": "datum.City1 == city_filter || datum.City2 == city_filter"
+        },
+        {
+          "calculate": "datum.City1 === city_filter ? datum.City2 : datum.City1",
+          "as": "PairedCity"
+        }
+      ],
+      "mark": "rule",
+      "encoding": {
+        "longitude": {
+          "field": "City1\\.Longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "City1\\.Latitude",
+          "type": "quantitative"
+        },
+        "longitude2": { "field": "City2\\.Longitude" },
+        "latitude2": { "field": "City2\\.Latitude" },
+        "tooltip": [
+          { "field": "PairedCity", "type": "nominal", "title": "Destination" },
+          { "field": "Season", "type": "ordinal" },
+          {
+            "field": "Passenger_Trips",
+            "type": "quantitative",
+            "title": "Averate Passenger Trips",
+            "format": ".2f"
+          }
+        ],
+        "size": {
+          "field": "Passenger_Trips",
+          "title": "",
+          "type": "quantitative",
+          "scale": { "range": [1, 5] }
+        },
+        "color": {
+          "field": "Passenger_Trips",
+          "type": "quantitative",
+          "scale": {
+            "scheme": { "name": "greens" }
+          },
+          "legend": {
+            "title": null,
+            "gradientLength": 100,
+            "orient": "bottom"
+          }
+        }
+      }
+    }
+  ],
+
+  "title": {
+    "text": {
+      "expr": "'Average Passenger Flights - ' + season_filter"
+    },
+    "anchor": "start"
+  },
+  "config": {
+    "view": { "stroke": null },
+    "legend": { "titleFontSize": 12, "labelFontSize": 11 }
+  }
+}

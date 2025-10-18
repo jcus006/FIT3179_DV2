@@ -1,0 +1,39 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": {
+      "expr": "'Wind Gust Speed (km/h) - ' + state_filter + ' (' + year_filter + ')'"
+    },
+    "anchor": "start"
+  },
+  "width": "container",
+  "height": 260,
+  "params": [
+    { "name": "year_filter", "value": 2008 },
+    { "name": "state_filter", "value": "Victoria" }
+  ],
+  "data": { "url": "data/windgustspeed_raw.csv" },
+  "transform": [
+    { "filter": "toNumber(datum['Year']) == year_filter" },
+    { "filter": "datum['State/Territory'] == state_filter" }
+  ],
+  "mark": "tick",
+  "encoding": {
+    "x": {
+      "field": "WindGustSpeed",
+      "type": "quantitative",
+      "axis": { "title": "Wind Gust Speed (km/h)" }
+    },
+    "y": {
+      "field": "Season",
+      "type": "nominal",
+      "axis": { "title": null },
+      "scale": { "domain": ["Summer", "Autumn", "Winter", "Spring"] }
+    }
+  },
+  "config": {
+    "view": { "stroke": null },
+    "axis": { "grid": false, "domain": false },
+    "padding": 5
+  }
+}

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Data Visualisation 2 Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/vega@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+      integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="pure-g">
+        <div class="pure-u-1-1">
+          <h1><strong>EXPERT</strong> WEATHER HOLIDAY GUIDE (AUS)</h1>
+        </div>
+      </div>
+
+      <div class="pure-g">
+        <div class="pure-u-1-3">
+          <div class="caption">
+            <p>
+              <em>Craving a getaway?</em> But not sure where to spend your
+              precious weeks off work? This is the essential guide to your next
+              holiday. To help you book the best holiday possible, we break down
+              top Australian destinations by key weather factors so you can find
+              the perfect spot to relax, explore, or chase the sun. Whether
+              you're after a tropical escape, a winter wonderland, or something
+              in between, this guide will help you match your travel dreams to
+              the right climate.
+            </p>
+            <p>
+              Simply follow the guide to first find the destination with your
+              preferred climate for the time of your trip, then explore the
+              sunshine, rainfall, and wind conditions in specific areas of
+              interest in greater detail below. Once you're across the
+              conditions, you can start planning your trip. Use the flight map
+              to decide which destinations are easiest for you to get to - that
+              way, you can make the most of your holiday escape. So, what are
+              you waiting for?
+            </p>
+          </div>
+        </div>
+
+        <div class="pure-u-2-3">
+          <img src="images/Snow_Holiday.jpg" style="height: 325px" />
+        </div>
+      </div>
+
+      <div class="pure-g">
+        <div class="pure-u-1-1">
+          <h2 class="first_sub">WEATHER STATS - <em>AT A GLANCE</em></h2>
+        </div>
+      </div>
+
+      <div class="pure-g">
+        <div class="pure-u-1-3">
+          <div class="caption">
+            <p>
+              Let's talk details. We've kept it simple, but a quick guide to the
+              numbers will make sense of it all, and make sure that you pick the
+              destinations which best suit your sun-bathing or skiing dreams.
+            </p>
+            <p>
+              This interactive map is designed so that you can easily compare
+              the weather conditions that matter to you and your holiday,
+              whether that's temperature, sunshine, wind or more. First, select
+              the weather data that you want to learn about. Then, select the
+              season that you're planning to make your getaway, or hit play for
+              a comparison across the years - so you can see the weather
+              variation at your destination. Now, simply explore the map to find
+              your ideal weather conditions.
+            </p>
+            <div>
+              <img src="images/Palm_Tree.jpg" style="height: 525px" />
+            </div>
+          </div>
+        </div>
+
+        <div class="pure-u-2-3">
+          <div
+            id="controls"
+            style="
+              margin: 0 0 12px;
+              display: flex;
+              gap: 8px;
+              align-items: center;
+              flex-wrap: wrap;
+            "
+          >
+            <button id="play">▶ Play</button>
+            <button id="pause" disabled>⏸ Pause</button>
+            <button id="step-back">⟵ Step</button>
+            <button id="step-forward">Step ⟶</button>
+            <label
+              >Speed (ms):
+              <input
+                id="speed"
+                type="number"
+                min="100"
+                step="100"
+                value="800"
+                style="width: 6ch"
+              />
+            </label>
+            <label> <input id="loop" type="checkbox" checked /> Loop </label>
+            <span
+              id="year-readout"
+              style="font-variant-numeric: tabular-nums"
+            ></span>
+          </div>
+
+          <div id="vis" class="panel"></div>
+
+          <script src="scripts/prop_symbol.js"></script>
+        </div>
+      </div>
+
+      <div class="pure-g">
+        <div class="pure-u-1-1">
+          <h2 class="second_sub">THE <em>CRITICAL</em> DETAILS TO COMPARE</h2>
+        </div>
+      </div>
+
+      <div class="pure-g">
+        <div class="pure-u-1-3">
+          <div class="caption">
+            <p style="padding-top: 30px">
+              Made a start, but need more information? Don't worry, we've got
+              you covered. This visualisation will help you compare weather
+              factors in a particular state. That way, you won't be blindsided
+              when it rains every day of your tropical vacation. Simply select
+              the state you're interested in, and use the graphs to easily
+              understand average rainfall, average sunshine and wind gust speed
+              across each season of the year at a glance. Use the years slider
+              to compare different weather conditions in each year. That way,
+              you'll have a good understanding of the factors conditions you can
+              expect on your upcoming trip.
+            </p>
+          </div>
+        </div>
+        <div class="pure-u-1-3">
+          <div class="toolbar" id="controls">
+            <div class="pure-u-1-1">
+              <label for="year">Year:</label>
+              <input
+                id="year"
+                type="range"
+                min="2009"
+                max="2016"
+                step="1"
+                value="2008"
+              />
+              <span id="yearVal">2008</span>
+            </div>
+            <div class="pure-u-1-1" ; style="padding-left: 50px">
+              <label for="state">State:</label>
+              <select id="state">
+                <option>Victoria</option>
+                <option>New South Wales</option>
+                <option>Queensland</option>
+                <option>South Australia</option>
+                <option>Western Australia</option>
+                <option>Northern Territory</option>
+                <option>Tasmania</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="pure-u-1-3">
+          <div id="vis4" ; style="padding-left: 40px"></div>
+        </div>
+      </div>
+
+      <div class="pure-g">
+        <div class="pure-u-1-3">
+          <div
+            id="vis1"
+            class="panel"
+            aria-label="Average Rainfall by Season"
+          ></div>
+        </div>
+        <div class="pure-u-1-3">
+          <div id="vis2" class="panel" aria-label="Sunshine Isotype"></div>
+        </div>
+        <div class="pure-u-1-3">
+          <div id="vis3" class="panel" aria-label="Wind Gusts"></div>
+        </div>
+      </div>
+
+      <script src="scripts/combined.js"></script>
+
+      <div class="pure-g">
+        <div class="pure-u-1-1">
+          <h2 class="third_sub">NOW, <em>HOW</em> TO GET THERE?</h2>
+        </div>
+      </div>
+
+      <div class="pure-g">
+        <div class="pure-u-1-3">
+          <div class="pure-u-1-1">
+            <div class="caption">
+              <p>
+                Picked your destination and ready to plan your trip? Just one
+                more step left before you'll be on the holiday of a lifetime.
+                This map will help you decide where to go based on how easy it
+                is to fly there. That way, you won't waste half of your precious
+                annual leave days on a plane or waiting around at the airport.
+                So, select your local city, and use the map to see where you can
+                fly directly to. The thicker the line, the more flights that go
+                to that location, and the more flexibility you will have when
+                booking your bucket-list trip.
+              </p>
+              <img src="images/Outback_Holiday.jpg" style="height: 525px" />
+            </div>
+          </div>
+        </div>
+
+        <div class="pure-u-2-3">
+          <div id="flightVis"></div>
+          <script src="scripts/travel_map.js"></script>
+        </div>
+      </div>
+
+      <div class="pure-g">
+        <div class="pure-u-1-3">
+          <p class="references">
+            Weather |
+            <a
+              href="https://www.kaggle.com/datasets/gauravduttakiit/weather-in-aus"
+              >LINK</a
+            >
+          </p>
+        </div>
+
+        <div class="pure-u-1-3">
+          <p class="references">
+            Locations |
+            <a
+              href="https://www.kaggle.com/datasets/max-mind/world-cities-database?select=worldcitiespop.csv"
+              >LINK</a
+            >
+          </p>
+        </div>
+
+        <div class="pure-u-1-3">
+          <p class="references">
+            Travel |
+            <a
+              href="https://www.kaggle.com/datasets/alphajuliet/au-dom-traffic?select=audomcitypairs-201912.csv"
+              >LINK</a
+            >
+          </p>
+        </div>
+      </div>
+
+      <div class="pure-g">
+        <div class="pure-u-1-3"></div>
+
+        <div class="pure-u-1-3">
+          <p class="author"><strong>Author: </strong>John Cusmano</p>
+        </div>
+
+        <div class="pure-u-1-3"></div>
+      </div>
+    </div>
+  </body>
+</html>

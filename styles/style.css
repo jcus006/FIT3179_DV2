@@ -1,0 +1,131 @@
+body {
+  background-color: #d8d2b8;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+img {
+  width: 100%;
+  vertical-align: middle;
+  border-radius: 5px;
+}
+
+h1 {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 50px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  border-radius: 10px;
+  background-color: #1D6AAE;
+  color: white;
+  font-family: "Helvetica Neue";
+  font-weight: bold;
+
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../images/Title_Image.jpg") center / cover no-repeat;
+}
+
+.first_sub {
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  font-size: 35px;
+  border-radius: 10px;
+  background-color: #1D6AAE;
+  color: white;
+  font-family: "Helvetica Neue";
+
+  background: 
+  linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)),
+    url("../images/First_Subheading_Image.jpg") center / cover no-repeat;
+}
+
+.second_sub {
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  font-size: 35px;
+  border-radius: 10px;
+  background-color: #1D6AAE;
+  color: white;
+  font-family: "Helvetica Neue";
+
+  background: 
+  linear-gradient(rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 0.5)),
+    url("../images/Second_Subheading_Image.jpg") center / 100% 100% no-repeat;
+}
+
+.third_sub {
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  font-size: 35px;
+  border-radius: 10px;
+  background-color: #1D6AAE;
+  color: white;
+  font-family: "Helvetica Neue";
+
+  background: 
+  linear-gradient(rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 0.5)),
+    url("../images/Third_Subheading_Image.jpg") center / 100% 100% no-repeat;
+}
+
+.caption {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 15px;
+  padding-right: 15px;
+
+  display: block;
+}
+
+.caption p {
+  margin: 0 0 1rem;
+}
+
+.container {
+  width:100%;
+  margin: 0 auto;              /* center horizontally */
+  background-color: #ffffff;   /* e.g. white for main section */
+  padding: 0 40px 40px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);  /* optional subtle depth */
+  min-height: 100vh;           /* optional: full screen height */
+  max-width: 1200px;
+}
+
+.panel, #vis, #vis1, #vis2, #vis3, #flightVis, #heatvis { width: 100%; }
+
+.full-bleed {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.toolbar {
+    display: flex;
+  align-items: center; /* vertical alignment */
+  justify-content: center; /* optional: horizontal centering */
+  height: 200px;
+}
+
+.legend-row {
+  display: flex;
+  justify-content: center;   /* centers the legend block to the container */
+  padding-top: 6px;
+}
+#legend, #heatmap {
+  max-width: 100%;           /* prevent overflow on narrow screens */
+}
+
+.references {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.author {
+  text-align: center;
+}

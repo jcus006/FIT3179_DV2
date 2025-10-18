@@ -1,0 +1,39 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": { "step": 26 },
+  "height": { "step": 30 },
+
+  "params": [
+    { "name": "year_filter", "value": 2008 },
+    { "name": "state_filter", "value": "Victoria" }
+  ],
+
+  "data": { "url": "data/sunshine_states_isotype.csv" },
+
+  "transform": [
+    { "filter": "toNumber(datum['Year']) == year_filter" },
+    { "filter": "datum['State/Territory'] == state_filter" },
+    {
+      "window": [{ "op": "rank", "as": "rank" }],
+      "groupby": ["Year", "State/Territory", "Season"]
+    }
+  ],
+
+  "mark": { "type": "text", "baseline": "middle" },
+
+  "encoding": {
+    "x": { "field": "rank", "type": "ordinal", "axis": null,
+           "scale": { "paddingInner": 0.05, "paddingOuter": 0.05 } },
+    "y": { "field": "Season", "type": "nominal",
+           "axis": { "title": null, "labelPadding": 4 },
+           "scale": { "domain": ["Summer","Autumn","Winter","Spring"],
+                      "paddingInner": 0.15, "paddingOuter": 0.05 } },
+    "text": { "value": "☀️" },
+    "size": { "value": 22 }
+  },
+
+  "title": { "text": { "expr": "'☀️ Sunshine — ' + state_filter + ' (' + year_filter + ')'" },
+             "anchor": "start" },
+
+  "config": { "view": { "stroke": null }, "axis": { "grid": false, "domain": false }, "padding": 5 }
+}

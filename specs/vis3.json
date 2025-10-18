@@ -1,0 +1,38 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": { "step": 26 },
+  "height": { "step": 30 },
+
+  "params": [
+    { "name": "year_filter", "value": 2008,
+      "bind": { "input": "range", "min": 2008, "max": 2017, "step": 1, "name": "Year:\u00A0" } },
+    { "name": "state_filter", "value": "Victoria",
+      "bind": {
+        "input": "select",
+        "options": ["Victoria","New South Wales","Queensland","South Australia","Western Australia","Northern Territory","Tasmania"],
+        "labels":  ["Victoria","New South Wales","Queensland","South Australia","Western Australia","Northern Territory","Tasmania"],
+        "name": "State:\u00A0"
+      }
+    }
+  ],
+
+  "data": { "url": "data/windgustspeed_raw.csv" },
+
+  "transform": [
+    { "filter": "toNumber(datum['Year']) == year_filter" },
+    { "filter": "datum['State/Territory'] == state_filter" }
+  ],
+
+  "mark": "tick",
+
+  "encoding": {
+    "x": { "field": "WindGustSpeed", "type": "quantitative",
+           "axis": { "title": "Wind Gust Speed" } },
+    "y": { "field": "Season", "type": "nominal", "axis": { "title": null },
+           "scale": { "domain": ["Summer", "Autumn", "Winter", "Spring"] } }
+  },
+
+  "title": { "text": "GOOD", "anchor": "start" },
+
+  "config": { "view": { "stroke": null }, "axis": { "grid": false, "domain": false }, "padding": 5 }
+}

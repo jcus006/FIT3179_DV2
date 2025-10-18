@@ -1,0 +1,45 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": {
+      "expr": "'Average Rainfall (mm) - ' + state_filter + ' (' + year_filter + ')'"
+    },
+    "anchor": "start"
+  },
+  "width": "container",
+  "height": 260,
+  "params": [
+    { "name": "year_filter", "value": 2008 },
+    { "name": "state_filter", "value": "Victoria" }
+  ],
+  "data": { "url": "data/rainfall_states.csv" },
+  "transform": [
+    {
+      "filter": "datum['Year'] == year_filter || toNumber(datum['Year']) == year_filter"
+    },
+    {
+      "filter": "datum['State/Territory'] && lower(trim(datum['State/Territory'])) == lower(trim(state_filter))"
+    }
+  ],
+  "mark": { "type": "bar" },
+  "encoding": {
+    "y": {
+      "field": "Season",
+      "type": "nominal",
+      "title": null,
+      "scale": { "domain": ["Summer", "Autumn", "Winter", "Spring"] }
+    },
+    "x": {
+      "field": "Rainfall",
+      "type": "quantitative",
+      "title": "Average Rainfall (mm)"
+    },
+    "color": { "field": "Season", "type": "nominal", "legend": null, "scale": {"scheme": "blues"}}
+  },
+  "config": {
+    "view": { "stroke": null },
+    "axis": { "grid": true, "domain": false },
+    "bar": { "cornerRadiusEnd": 3 },
+    "padding": 5
+  }
+}

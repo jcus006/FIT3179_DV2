@@ -1,0 +1,236 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 650,
+  "autosize": { "type": "fit", "contains": "padding" },
+  "projection": { "type": "mercator", "center": [134, -28], "scale": 850 },
+
+  "params": [
+    {
+      "name": "season_filter",
+      "value": "Winter",
+      "bind": {
+        "input": "select",
+        "options": ["Summer", "Autumn", "Winter", "Spring"],
+        "labels": ["Summer", "Autumn", "Winter", "Spring"],
+        "name": "Season: "
+      }
+    },
+    {
+      "name": "year_filter",
+      "value": 2009,
+      "bind": {
+        "input": "range",
+        "min": 2009,
+        "max": 2016,
+        "step": 1,
+        "name": "Year:\t"
+      }
+    },
+    {
+      "name": "attribute_select",
+      "value": "MaxTemp",
+      "bind": {
+        "input": "select",
+        "options": [
+          "MaxTemp",
+          "MinTemp",
+          "Rainfall",
+          "Sunshine",
+          "WindGustSpeed"
+        ],
+        "labels": [
+          "Maximum Temp",
+          "Minimum Temp",
+          "Rainfall",
+          "Sunshine",
+          "Wind Gust Speed"
+        ],
+        "name": "Attribute: "
+      }
+    },
+    {
+      "name": "legendTitles",
+      "value": {
+        "MaxTemp": "Maximum Temperature (°C)",
+        "MinTemp": "Minimum Temperature (°C)",
+        "Rainfall": "Rainfall (mm)",
+        "Sunshine": "Sunshine (hours)",
+        "WindGustSpeed": "Wind Gust Speed (km/h)"
+      }
+    },
+    {
+      "name": "attributeColors",
+      "value": {
+        "MaxTemp": "red",
+        "MinTemp": "orange",
+        "Rainfall": "blue",
+        "Sunshine": "gold",
+        "WindGustSpeed": "gray"
+      }
+    },
+    {
+      "name": "attributeColorSchemes",
+      "value": {
+        "MaxTemp": "reds",
+        "MinTemp": "oranges",
+        "Rainfall": "blues",
+        "Sunshine": "reds",
+        "WindGustSpeed": "purples"
+      }
+    }
+  ],
+
+  "layer": [
+    {
+      "data": { "sphere": true },
+      "mark": { "type": "geoshape", "fill": "#eaf4ff" }
+    },
+
+    {
+      "data": { "graticule": { "step": [20, 20] } },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#cbd5e1",
+        "strokeWidth": 0.5,
+        "fill": null
+      }
+    },
+    {
+      "data": {
+        "url": "maps/ne_50m_admin_0_countries.json",
+        "format": { "type": "topojson", "feature": "ne_50m_admin_0_countries" }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#f3f4f6",
+        "stroke": "#94a3b8",
+        "strokeWidth": 0.5
+      }
+    },
+    {
+      "data": {
+        "url": "maps/ne_50m_admin_1_states_provinces.json",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_50m_admin_1_states_provinces"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#f3f4f6",
+        "stroke": "#000000",
+        "strokeWidth": 0.5
+      }
+    },
+
+    {
+      "data": {
+        "values": [
+          { "name": "Western Australia", "lon": 122.0, "lat": -25.3 },
+          { "name": "Northern Territory", "lon": 133.5, "lat": -19.5 },
+          { "name": "South Australia", "lon": 135.0, "lat": -30.0 },
+          { "name": "Queensland", "lon": 144.0, "lat": -23.0 },
+          { "name": "New South Wales", "lon": 147.0, "lat": -32.5 },
+          { "name": "Victoria", "lon": 144.5, "lat": -37.2 },
+          { "name": "Tasmania", "lon": 146.7, "lat": -42.0 }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "fill": "#333",
+        "baseline": "middle",
+        "align": "center",
+        "opacity": 0.5
+      },
+      "encoding": {
+        "longitude": { "field": "lon", "type": "quantitative" },
+        "latitude": { "field": "lat", "type": "quantitative" },
+        "text": { "field": "name" }
+      }
+    },
+
+    {
+      "data": {
+        "url": "data/year_and_season.csv",
+        "format": { "type": "csv" }
+      },
+      "transform": [
+        { "filter": "datum.Season == season_filter" },
+        { "filter": "datum.Year == year_filter" },
+
+        {
+          "fold": [
+            "MaxTemp",
+            "MinTemp",
+            "Rainfall",
+            "Sunshine",
+            "WindGustSpeed"
+          ],
+          "as": ["Attribute", "Value"]
+        },
+        { "filter": "datum.Attribute == attribute_select" }
+      ],
+      "mark": {
+        "type": "circle",
+        "opacity": 0.8,
+        "stroke": "white",
+        "strokeWidth": 0.5
+      },
+      "encoding": {
+        "longitude": { "field": "Longitude", "type": "quantitative" },
+        "latitude": { "field": "Latitude", "type": "quantitative" },
+
+        "size": {
+  "field": "Value",
+  "type": "quantitative",
+  "scale": {
+    "type": "sqrt",
+    "zero": false,
+    "clamp": true,
+    "nice": true,
+    "range": [24, 700]
+  },
+  "legend": {
+    "title": null,
+    "orient": "bottom",
+    "symbolStrokeColor": "white",
+    "symbolStrokeWidth": 0.6
+  }
+},
+
+        "color": {
+          "field": "Value",
+          "type": "quantitative",
+          "scale": {
+            "scheme": { "expr": "attributeColorSchemes[attribute_select]" }
+          },
+          "legend": {
+            "title": null,
+            "gradientLength": 160,
+            "orient": "bottom"
+          }
+        },
+
+        "tooltip": [
+          { "field": "Attribute", "type": "nominal", "title": "Attribute" },
+          { "field": "Value", "type": "quantitative" },
+          { "field": "Latitude", "type": "quantitative" },
+          { "field": "Longitude", "type": "quantitative" },
+          { "field": "State/Territory", "type": "ordinal" }
+        ]
+      }
+    }
+  ],
+
+  "title": {
+    "text": { "expr": "legendTitles[attribute_select]" },
+    "anchor": "start"
+  },
+  "config": {
+    "view": { "stroke": null },
+    "legend": { "titleFontSize": 12, "labelFontSize": 11 }
+  }
+}

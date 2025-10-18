@@ -1,0 +1,92 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 350,
+  "height": 260,
+  "projection": { "type": "mercator", "center": [134, -28], "scale": 350 },
+
+  "params": [{ "name": "state_filter", "value": "Victoria" }],
+
+  "layer": [
+    {
+      "data": { "sphere": true },
+      "mark": { "type": "geoshape", "fill": "#eaf4ff" }
+    },
+
+    {
+      "data": { "graticule": { "step": [20, 20] } },
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#cbd5e1",
+        "strokeWidth": 0.5,
+        "fill": null
+      }
+    },
+
+    {
+      "data": {
+        "url": "maps/ne_50m_admin_0_countries.json",
+        "format": { "type": "topojson", "feature": "ne_50m_admin_0_countries" }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#f3f4f6",
+        "stroke": "#94a3b8",
+        "strokeWidth": 0.5
+      }
+    },
+
+    {
+      "data": {
+        "url": "maps/ne_50m_admin_1_states_provinces.json",
+        "format": {
+          "type": "topojson",
+          "feature": "ne_50m_admin_1_states_provinces"
+        }
+      },
+      "transform": [{ "filter": "datum.properties.adm0_a3 == 'AUS'" }],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#000000",
+        "strokeWidth": 0.6,
+        "fill": null
+      }
+    },
+
+    {
+      "data": {
+        "url": "data/state_select.csv"
+      },
+      "transform": [
+        {
+          "lookup": "State/Territory",
+          "from": {
+            "data": {
+              "url": "maps/ne_50m_admin_1_states_provinces.json",
+              "format": {
+                "type": "topojson",
+                "feature": "ne_50m_admin_1_states_provinces"
+              }
+            },
+            "key": "properties.name"
+          },
+          "as": "geo"
+        },
+        { "filter": "datum['State/Territory'] == state_filter" }
+      ],
+      "mark": { "type": "geoshape", "stroke": null },
+      "encoding": {
+        "shape": { "field": "geo", "type": "geojson" },
+        "color": { "value": "blue" },
+        "tooltip": [
+          { "field": "State/Territory", "title": "State" }
+        ]
+      }
+    }
+  ],
+
+  "title": { "text": "Selected State", "anchor": "start" },
+  "config": {
+    "view": { "stroke": null },
+    "legend": { "titleFontSize": 12, "labelFontSize": 11 }
+  }
+}
