@@ -9,8 +9,8 @@
     { "name": "state_filter", "value": "Victoria",
       "bind": {
         "input": "select",
-        "options": ["Victoria","New South Wales","Queensland","South Australia","Western Australia","Northern Territory","Tasmania"],
-        "labels":  ["Victoria","New South Wales","Queensland","South Australia","Western Australia","Northern Territory","Tasmania"],
+        "options": ["Victoria","New South Wales","Queensland","South Australia","Western Australia","Northern Territory","Tasmania", "Australian Capital Territory"],
+        "labels":  ["Victoria","New South Wales","Queensland","South Australia","Western Australia","Northern Territory","Tasmania", "Australian Capital Territory"],
         "name": "State:\u00A0"
       }
     }
