@@ -184,22 +184,22 @@
         "latitude": { "field": "Latitude", "type": "quantitative" },
 
         "size": {
-  "field": "Value",
-  "type": "quantitative",
-  "scale": {
-    "type": "sqrt",
-    "zero": false,
-    "clamp": true,
-    "nice": true,
-    "range": [24, 700]
-  },
-  "legend": {
-    "title": null,
-    "orient": "bottom",
-    "symbolStrokeColor": "white",
-    "symbolStrokeWidth": 0.6
-  }
-},
+          "field": "Value",
+          "type": "quantitative",
+          "scale": {
+            "type": "sqrt",
+            "zero": false,
+            "clamp": true,
+            "nice": true,
+            "range": [24, 700]
+          },
+          "legend": {
+            "title": null,
+            "orient": "bottom",
+            "symbolStrokeColor": "white",
+            "symbolStrokeWidth": 0.6
+          }
+        },
 
         "color": {
           "field": "Value",
@@ -222,6 +222,170 @@
           { "field": "State/Territory", "type": "ordinal" }
         ]
       }
+    },
+    {
+      "data": {
+        "url": "data/year_and_season.csv",
+        "format": { "type": "csv" }
+      },
+      "transform": [
+        { "filter": "datum.Season == season_filter" },
+        { "filter": "datum.Year == year_filter" },
+        {
+          "fold": [
+            "MaxTemp",
+            "MinTemp",
+            "Rainfall",
+            "Sunshine",
+            "WindGustSpeed"
+          ],
+          "as": ["Attribute", "Value"]
+        },
+        { "filter": "datum.Attribute == attribute_select" },
+        { "aggregate": [{ "op": "argmax", "field": "Value", "as": "max" }] },
+
+        {
+          "calculate": "(toNumber(datum.max.Longitude) - 2) < 112 ? 2 : -2",
+          "as": "dx_deg"
+        },
+        {
+          "calculate": "(toNumber(datum.max.Latitude) - 1) < -44 ? 1 : -1",
+          "as": "dy_deg"
+        },
+        {
+          "calculate": "toNumber(datum.max.Longitude) + datum.dx_deg",
+          "as": "max_lon_label"
+        },
+        {
+          "calculate": "toNumber(datum.max.Latitude)  + datum.dy_deg",
+          "as": "max_lat_label"
+        },
+        {
+          "calculate": "'Max: ' + (round(toNumber(datum.max.Value)*10)/10)",
+          "as": "max_text"
+        },
+        {
+          "calculate": "datum.dx_deg < 0 ? 'right' : 'left'",
+          "as": "text_align"
+        },
+        {
+          "calculate": "datum.dy_deg < 0 ? 'top' : 'bottom'",
+          "as": "text_baseline"
+        }
+      ],
+      "layer": [
+        {
+          "mark": { "type": "rule", "color": "#555", "strokeWidth": 1.5 },
+          "encoding": {
+            "longitude": { "field": "max.Longitude" },
+            "latitude": { "field": "max.Latitude" },
+            "longitude2": { "field": "max_lon_label" },
+            "latitude2": { "field": "max_lat_label" }
+          }
+        },
+
+        {
+          "mark": {
+            "type": "text",
+            "fontSize": 15,
+            "fontWeight": "bold",
+            "fill": "#333",
+            "align": { "expr": "datum.text_align" },
+            "baseline": { "expr": "datum.text_baseline" },
+            "dx": -2,
+            "dy": 2,
+            "cornerRadius": 4,
+            "stroke": "#333",
+            "strokeWidth": 0.5
+          },
+          "encoding": {
+            "longitude": { "field": "max_lon_label" },
+            "latitude": { "field": "max_lat_label" },
+            "text": { "field": "max_text" }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "url": "data/year_and_season.csv",
+        "format": { "type": "csv" }
+      },
+      "transform": [
+        { "filter": "datum.Season == season_filter" },
+        { "filter": "datum.Year == year_filter" },
+        {
+          "fold": [
+            "MaxTemp",
+            "MinTemp",
+            "Rainfall",
+            "Sunshine",
+            "WindGustSpeed"
+          ],
+          "as": ["Attribute", "Value"]
+        },
+        { "filter": "datum.Attribute == attribute_select" },
+
+        { "aggregate": [{ "op": "argmin", "field": "Value", "as": "min" }] },
+
+        {
+          "calculate": "(toNumber(datum.min.Longitude) - 2) < 112 ? 2 : -2",
+          "as": "dx_deg"
+        },
+        {
+          "calculate": "(toNumber(datum.min.Latitude) - 1) < -42 ? 1 : -1",
+          "as": "dy_deg"
+        },
+
+        {
+          "calculate": "toNumber(datum.min.Longitude) + datum.dx_deg",
+          "as": "min_lon_label"
+        },
+        {
+          "calculate": "toNumber(datum.min.Latitude)  + datum.dy_deg",
+          "as": "min_lat_label"
+        },
+
+        {
+          "calculate": "'Min: ' + (round(toNumber(datum.min.Value)*10)/10)",
+          "as": "min_text"
+        },
+
+        {
+          "calculate": "datum.dx_deg < 0 ? 'right' : 'left'",
+          "as": "text_align"
+        },
+        {
+          "calculate": "datum.dy_deg < 0 ? 'top'   : 'bottom'",
+          "as": "text_baseline"
+        }
+      ],
+      "layer": [
+        {
+          "mark": { "type": "rule", "color": "#555", "strokeWidth": 1.5 },
+          "encoding": {
+            "longitude": { "field": "min.Longitude" },
+            "latitude": { "field": "min.Latitude" },
+            "longitude2": { "field": "min_lon_label" },
+            "latitude2": { "field": "min_lat_label" }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "fontSize": 15,
+            "fontWeight": "bold",
+            "fill": "#333",
+            "dx": -2,
+            "dy": 2
+          },
+          "encoding": {
+            "longitude": { "field": "min_lon_label" },
+            "latitude": { "field": "min_lat_label" },
+            "text": { "field": "min_text" }
+          }
+        }
+      ]
     }
   ],
 
