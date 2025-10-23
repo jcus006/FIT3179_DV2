@@ -72,6 +72,21 @@ h1 {
     url("../images/Third_Subheading_Image.jpg") center / 100% 100% no-repeat;
 }
 
+.fourth_sub {
+  text-align: center;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  font-size: 35px;
+  border-radius: 10px;
+  background-color: #1D6AAE;
+  color: white;
+  font-family: "Helvetica Neue";
+
+  background: 
+  linear-gradient(rgba(0, 0, 0, 0.01), rgba(0, 0, 0, 0.5)),
+    url("../images/Fourth_Subheading_Image.jpg") center / 100% 100% no-repeat;
+}
+
 .caption {
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: 15px;
